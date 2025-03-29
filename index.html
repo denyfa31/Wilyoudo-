@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Girlfriend?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;700&display=swap');body {
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: linear-gradient(to bottom, #ff9a9e, #fecfef);
+        overflow: hidden;
+    }
+    .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 500px;
+        opacity: 1;
+        transition: opacity 2s ease-in-out;
+    }
+    .hidden {
+        display: none;
+    }
+    .btn {
+        padding: 15px 30px;
+        font-size: 20px;
+        margin: 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 12px;
+        transition: all 0.3s;
+        font-weight: bold;
+    }
+    .yes {
+        background-color: #ff4081;
+        color: white;
+        box-shadow: 0 3px 10px rgba(255, 64, 129, 0.5);
+    }
+    .no {
+        background-color: #555;
+        color: white;
+        position: absolute;
+        border-radius: 10px;
+    }
+    .heart {
+        position: absolute;
+        color: red;
+        font-size: 30px;
+        animation: fall 4s linear infinite;
+    }
+    @keyframes fall {
+        from { transform: translateY(-100px); opacity: 1; }
+        to { transform: translateY(100vh); opacity: 0; }
+    }
+    .love-message {
+        font-size: 28px;
+        font-family: 'Pacifico', cursive;
+        color: #e63946;
+        opacity: 0;
+        transform: scale(0.5);
+        animation: showMessage 2s forwards;
+    }
+    @keyframes showMessage {
+        from {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+</style>
+
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio><div class="container" id="page1">
+    <h1>Will you be my girlfriend?</h1>
+    <button class="btn yes" onclick="playMusicAndShowLoveMessage()">Yes, I do ❤</button>
+    <button class="btn no" onmouseover="moveNoButton()">No, I leave</button>
+</div>
+
+<div class="container hidden" id="loveMessage">
+    <h2 class="love-message">Yes, I love you! Let's meet ❤️</h2>
+</div>
+
+<div class="container hidden" id="page2">
+    <h1>Let's schedule our first date!</h1>
+    <label>Date: <input type="date" id="date"></label><br>
+    <label>Time: <input type="time" id="time"></label><br>
+    <label>Place: <input type="text" id="place" placeholder="Enter a place"></label><br>
+    <button class="btn yes" onclick="submitDate()">Submit</button>
+</div>
+
+<div class="container hidden" id="page3">
+    <h1>Yay! Our date is set!</h1>
+    <p id="confirmation"></p>
+</div>
+
+<script>
+    function moveNoButton() {
+        let noButton = document.querySelector('.no');
+        let x = Math.random() * (window.innerWidth - 100);
+        let y = Math.random() * (window.innerHeight - 50);
+        noButton.style.left = `${x}px`;
+        noButton.style.top = `${y}px`;
+    }
+    
+    function playMusicAndShowLoveMessage() {
+        document.getElementById("bgMusic").play();
+        document.getElementById("page1").classList.add("hidden");
+        document.getElementById("loveMessage").classList.remove("hidden");
+        setTimeout(() => startTransition(2), 4000);
+    }
+    
+    function startTransition(page) {
+        document.querySelectorAll('.container').forEach(div => {
+            div.classList.add('hidden');
+            div.classList.remove('fade-out');
+        });
+        let nextPage = document.getElementById(`page${page}`);
+        nextPage.classList.remove('hidden');
+        setTimeout(() => dropHearts(), 4000);
+    }
+    
+    function submitDate() {
+        let date = document.getElementById('date').value;
+        let time = document.getElementById('time').value;
+        let place = document.getElementById('place').value;
+        if (date && time && place) {
+            document.getElementById('confirmation').innerText = `See you on ${date} at ${time} in ${place}!`;
+            startTransition(3);
+        }
+    }
+    
+    function dropHearts() {
+        for (let i = 0; i < 30; i++) {
+            let heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 4 + 3 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+    }
+</script>
+
+</body>
+</html>
